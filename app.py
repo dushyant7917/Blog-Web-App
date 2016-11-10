@@ -2,11 +2,13 @@ from flask import Flask, render_template, url_for, request, session, redirect, f
 from flask.ext.pymongo import PyMongo
 import bcrypt
 import re
+import time
 
 app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'blog'
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'
+
 
 mongo = PyMongo(app)
 
@@ -14,19 +16,36 @@ mongo = PyMongo(app)
 @app.route('/')
 def index():
     if 'username' in session:
-        return render_template('blog.html')
+        return redirect(url_for('blog'))
 
     return render_template('index.html')
 
 
-@app.route('/blog')
+@app.route('/blog', methods = ['GET', 'POST'])
 def blog():
+    if request.method == 'GET':
+        if 'username' in session:
+            articles = mongo.db.articles
+            content = articles.find()
+            return render_template('blog.html', content = content)
+
+        return render_template('login.html')
+
+    else:
+        comments = mongo.db.comments
+        #comments.insert({'_id':,'number': })
+        return "dff"
+
+
+
+@app.route('/comment/<string:artcl>')
+def comment(artcl):
     if 'username' in session:
-        articles = mongo.db.articles
-        content = articles.find({'author': session['username']})
-        return render_template('blog.html', content = content)
+        print artcl['author']
+        return render_template('comment.html', item = artcl)
 
     return render_template('login.html')
+
 
 
 @app.route('/profile')
@@ -34,7 +53,6 @@ def profile():
     if 'username' in session:
         users = mongo.db.users
         details = users.find_one({'username': session['username']})
-        print details['username']
         return render_template('profile.html', details = details)
 
     return render_template('login.html')
@@ -44,18 +62,21 @@ def profile():
 def editProfile():
     if request.method == "GET":
         if 'username' in session:
-            return render_template('editProfile.html')
+            users = mongo.db.users
+            details = users.find_one({'username': session['username']})
+            return render_template('editProfile.html', details = details)
 
         return render_template('login.html')
 
     else:
-        username = request.form['username']
         name = request.form['name']
         age = request.form['age']
         profession = request.form['profession']
+        pic = request.form['pic']
         users = mongo.db.users
-        users.update({'_id': session['username']}, {'$set': {'name': name, 'username': username, 'age': age, 'profession': profession}})
+        users.update({'username': session['username']}, {'$set': {'name': name, 'age': age, 'profession': profession, 'pic': pic}})
         return redirect(url_for('profile'))
+
 
 
 
@@ -68,7 +89,10 @@ def addBlog():
             articles = mongo.db.articles
             art = re.sub('<p>', '', request.form['editor1'])
             art = re.sub('</p>', '', art)
-            articles.insert({ 'author': session['username'], 'article': art })
+            artTitle = request.form['title']
+            artPic = request.form['art_pic']
+            date = time.strftime("%B %d,"+" %Y")
+            articles.insert({ 'author': session['username'], 'article': art , 'title': artTitle , 'date': date, 'pic': artPic})
             return redirect(url_for('blog'))
 
     else:
@@ -82,10 +106,6 @@ def home():
 
 @app.route("/logout")
 def logout():
-    #current_score = request.form['current_score']
-    #current_level = request.form['current_level']
-    #users = mongo.db.users
-    #users.update({'_id': session['username']}, {'$set': {'score': current_score, 'level': current_level}})
     session.clear()
     return redirect(url_for('index'))
 
@@ -103,7 +123,7 @@ def login():
 
         message = Markup("Invalid username or password!")
         flash(message)
-        return render_template('wrong_login.html')
+        return render_template('login.html')
 
     else:
         return render_template('login.html')
@@ -114,19 +134,24 @@ def login():
 def register():
     if request.method == 'POST':
         users = mongo.db.users
-        existing_user = users.find_one({'name': request.form['username']})
+        existing_user = users.find_one({'username': request.form['username']})
 
+        print ("entered username : " + str(request.form['username']))
 
         if existing_user is None:
             hashpass = bcrypt.hashpw(request.form['pass'].encode('utf-8'), bcrypt.gensalt())
-            users.insert({ '_id': request.form['username'], 'username': request.form['username'], 'password': hashpass })
+            users.insert({ 'username': request.form['username'], 'password': hashpass, 'pic': '/static/defaultProfilePic.png'})
+
+            print ("New Username : " + str(request.form['username']))
 
             return redirect(url_for('index'))
 
-
         message = Markup("This username is already registered!")
         flash(message)
-        return render_template('wrong_register.html')
+
+        print "Wrong!"
+
+        return render_template('register.html')
 
     return render_template('register.html')
 
