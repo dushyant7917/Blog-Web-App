@@ -1,14 +1,14 @@
+import os
 from flask import Flask, render_template, url_for, request, session, redirect, flash, Markup
 from flask.ext.pymongo import PyMongo
 import bcrypt
-import re
 import time
 
 app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'blog'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'
-
+app.config['MONGO_URI'] = 'mongodb://dushyant7917:abc123@ds149207.mlab.com:49207/colour_game'
+# 'mongodb://localhost:27017/blog'
 
 mongo = PyMongo(app)
 
@@ -87,8 +87,7 @@ def addBlog():
             return render_template('addBlog.html')
         else:
             articles = mongo.db.articles
-            art = re.sub('<p>', '', request.form['editor1'])
-            art = re.sub('</p>', '', art)
+            art = request.form['editor1']
             artTitle = request.form['title']
             artPic = request.form['art_pic']
             date = time.strftime("%B %d,"+" %Y")
@@ -158,4 +157,5 @@ def register():
 
 if __name__ == '__main__':
     app.secret_key = 'dushyant7917'
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
