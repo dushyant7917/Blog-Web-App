@@ -8,9 +8,9 @@
 <link rel="stylesheet" href="/static/indexGoogle2.css">
 <link rel="stylesheet" href="/static/indexCloudfare.css">
 <link rel="stylesheet" href="/static/login.css">
-
-<script src="/static/addBlog.js"></script>
-<script src="/static/ckeditor/ckeditor.js"></script>
+<script src="/static/jquery-2.2.3.js"></script>
+<script src="/static/tinymce.min.js"></script>
+<script src="/static/jquery.tinymce.min.js"></script>
 
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
@@ -47,7 +47,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 
         <div class="control-group">
         <label class="login-field-icon fui-user" for="login-name"></label>
-				<input type="text" class="login-field" value="" placeholder="Article Title" name="title" required>
+				<input type="text" class="login-field" align="left" value="" placeholder="Article Title" name="title" required>
 				</div>
 
         <div class="control-group">
@@ -55,10 +55,19 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
             <input type="text" class="login-field" value="" placeholder="Article Pic URL" name="art_pic" required>
         </div>
 
-        <textarea name="editor1" id="editor1" required>Initial editor content.</textarea>
-          <script>
-            CKEDITOR.replace('editor1');
-          </script>
+        <textarea id="typeText" name="editor1">Write here...</textarea>
+        <script>
+            tinymce.init({
+                selector:'#typeText',
+                browser_spellcheck: true,
+                height: 325,
+                max_width: 1000,
+                statusbar: false,
+                plugins: [
+                    'image charmap preview searchreplace code fullscreen media table paste spellchecker'
+                ]
+            });
+        </script>
 
           <div class="control-group">
             <button type="submit"class="login-field" onclick="addBlog()">Submit</button>

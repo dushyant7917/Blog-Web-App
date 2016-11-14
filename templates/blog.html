@@ -83,7 +83,7 @@ and is wrapped around the whole page content, except for the footer in this exam
     </div>
 
     <div class="w3-container">
-     <p>{{ item['article'] }}</p>
+     <p>{{ item['article'] | safe }}</p>
       <div class="w3-row">
         <div class="w3-col m8 s12">
           <p><a href="{{url_for('comment', artcl = item)}}"><button  class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b>COMMENT »</b></button></a></p>
