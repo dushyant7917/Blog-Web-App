@@ -1,120 +1,98 @@
 <!DOCTYPE html>
 <html>
+<head>
 <title>dushyant7917 BLOG</title>
-<meta charset='utf-8'>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/static/indexStyle.css">
-<link rel="stylesheet" href="/static/indexGoogle1.css">
-<link rel="stylesheet" href="/static/indexGoogle2.css">
-<link rel="stylesheet" href="/static/indexCloudfare.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<script src="/static/addBlog.js"></script>
+	<meta charset="utf-8">
+	<!-- Always force latest IE rendering engine & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+  <link rel="stylesheet" href="/static/indexStyle.css">
+  <link rel="stylesheet" href="/static/indexGoogle1.css">
+  <link rel="stylesheet" href="/static/indexGoogle2.css">
+  <link rel="stylesheet" href="/static/indexCloudfare.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+</head>
+
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
-.w3-navbar,h1,button {font-family: "Montserrat", sans-serif}
-.fa-anchor,.fa-coffee {font-size:200px}
+  .w3-navbar,h1,button {font-family: "Montserrat", sans-serif}
+  .fa-anchor,.fa-coffee {font-size:200px}
 </style>
-<body>
-
-<!-- Navbar -->
-<div class="w3-top">
-  <ul class="w3-navbar w3-red w3-card-2 w3-left-align w3-large">
-    <li class="w3-hide-medium w3-hide-large w3-opennav w3-right">
-      <a class="w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-    </li>
-    <li><a href="{{url_for('blog')}}" class="w3-padding-large w3-white">Blogs</a></li>
-    <li class="w3-hide-small"><a href="{{url_for('profile')}}" class="w3-padding-large w3-hover-white">Profile</a></li>
-    <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">New Blog</a></li>
-    <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
-  </ul>
-
-  <!-- Navbar on small screens -->
-  <div id="navDemo" class="w3-hide w3-hide-large w3-hide-medium">
-    <ul class="w3-navbar w3-left-align w3-large w3-black">
-      <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
-      <li><a class="w3-padding-large" href="{{url_for('addBlog')}}">New Blog</a></li>
-      <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
-    </ul>
-  </div>
-</div>
-
-
-<script>
-// Used to toggle the menu on small screens when clicking on the menu button
-function myFunction() {
-    var x = document.getElementById("navDemo");
-    if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
-    } else {
-        x.className = x.className.replace(" w3-show", "");
-    }
-}
-</script>
-
-</body>
 
 <body class="w3-light-grey">
 
-<!-- w3-content defines a container for fixed size centered content,
-and is wrapped around the whole page content, except for the footer in this example -->
-<div class="w3-content" style="max-width:1400px">
+  <!-- Navbar -->
+  <div class="w3-top">
+    <ul class="w3-navbar w3-red w3-card-2 w3-left-align w3-large">
+      <li class="w3-hide-medium w3-hide-large w3-opennav w3-right">
+        <a class="w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+      </li>
+      <li><a href="{{url_for('blog')}}" class="w3-padding-large w3-white">Blogs</a></li>
+      <li class="w3-hide-small"><a href="{{url_for('profile')}}" class="w3-padding-large w3-hover-white">Profile</a></li>
+      <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">New Blog</a></li>
+      <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
+    </ul>
 
-<!-- Header -->
-<header class="w3-container w3-center w3-padding-32">
-  <br>
-  <p>Welcome to the blog website of <span class="w3-tag">dushyant7917</span></p>
-</header>
+    <!-- Navbar on small screens -->
+    <div id="navDemo" class="w3-hide w3-hide-large w3-hide-medium">
+      <ul class="w3-navbar w3-left-align w3-large w3-black">
+        <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
+        <li><a class="w3-padding-large" href="{{url_for('addBlog')}}">New Blog</a></li>
+        <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+
+	<header class="w3-container w3-center w3-padding-32">
+	  <br>
+	  <p>Welcome to the blog website of <span class="w3-tag">dushyant7917</span></p>
+	</header>
 
 
 
-<!-- Grid -->
-<div class="w3-row">
 
-<!-- Blog entries -->
-<div class="w3-col l8 s12">
-
-  <!-- Blog entry -->
+<div class="section group">
 {% for item in content%}
-  <div class="w3-card-4 w3-margin w3-white" style="width:1365px">
-  <img src="{{ item['pic'] }}" height="200" width="300" alt="Nature">
+<div class="w3-card-4 w3-margin w3-white" width="100%">
+    <img src="{{ item['pic']}}" alt="Nature" height="200" width="200">
     <div class="w3-container w3-padding-8">
-      <h3><b>{{ item['title'] }} <h4>{{ item['author'] }}</h4></b></h3>
-      <h5><span class="w3-opacity">{{ item['date'] }}</span></h5>
+      <h3><b>{{item['title']}}</b></h3>
+      <h5>{{item['author']}} <span class="w3-opacity">{{item['date']}}</span></h5>
     </div>
 
     <div class="w3-container">
-     <p>{{ item['article'] | safe }}</p>
-      <div class="w3-row">
-        <div class="w3-col m8 s12">
-          <p><a href="{{url_for('comment', artcl = item)}}"><button  class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b>COMMENT »</b></button></a></p>
-        </div>
-        <div class="w3-col m4 w3-hide-small">
-          <p><span class="w3-padding-large w3-right"><b>Comments  </b> <span class="w3-tag">0</span></span></p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <hr>
+      <p>{{item['article'] | safe}}</p>
+		</div>
+</div>
+<hr>
 {% endfor %}
-
-
-<!-- END BLOG ENTRIES -->
-</div>
 </div>
 
-<!-- END GRID -->
-</div><br>
 
 
-<!-- Footer -->
-<footer class="w3-container w3-padding-64 w3-center w3-opacity">
-  <div class="w3-xlarge w3-padding-32">
-   <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-red"><img src="/static/in.png" height="30px" width="30px"></a>
-   <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/gh.png" height="30px" width="30px"></a>
- </div>
- <p>Powered by <a href="https://github.com/dushyant7917" target="_blank">dushyant7917</a></p>
-</footer>
+  <!-- Footer -->
+  <footer class="w3-container w3-padding-64 w3-center w3-opacity">
+    <div class="w3-xlarge w3-padding-32">
+      <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-red"><img src="/static/in.png" height="30px" width="30px"></a>
+      <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/gh.png" height="30px" width="30px"></a>
+   </div>
+   <p>Powered by <a href="https://github.com/dushyant7917" target="_blank">dushyant7917</a></p>
+  </footer>
+
+<script>
+  // Used to toggle the menu on small screens when clicking on the menu button
+  function myFunction() {
+      var x = document.getElementById("navDemo");
+      if (x.className.indexOf("w3-show") == -1) {
+          x.className += " w3-show";
+      } else {
+          x.className = x.className.replace(" w3-show", "");
+      }
+  }
+</script>
 
 </body>
-
-</html>
+<html>

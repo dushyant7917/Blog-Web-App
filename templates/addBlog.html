@@ -45,17 +45,11 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 
       <form method="POST" action="{{url_for('addBlog')}}">
 
-        <div class="control-group">
-        <label class="login-field-icon fui-user" for="login-name"></label>
-				<input type="text" class="login-field" align="left" value="" placeholder="Article Title" name="title" required>
-				</div>
+        ARTICLE  TITLE <br><input type="text" placeholder="Title" name="title" required><hr>
 
-        <div class="control-group">
-            <label class="login-field-icon fui-user" for="login-name"></label>
-            <input type="text" class="login-field" value="" placeholder="Article Pic URL" name="art_pic" required>
-        </div>
+        PICTURE  URL <br><input type="text" placeholder="Paste Picture URL" name="art_pic" required><hr>
 
-        <textarea id="typeText" name="editor1">Write here...</textarea>
+        <textarea id="typeText" name="editor1">Write here...</textarea><hr>
         <script>
             tinymce.init({
                 selector:'#typeText',
@@ -69,16 +63,15 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
             });
         </script>
 
-          <div class="control-group">
-            <button type="submit"class="login-field" onclick="addBlog()">Submit</button>
+          <div lass="control-group">
+            <button type="submit" class="btn btn-primary btn-large btn-block" onclick="addBlog()">Submit</button><br>
           </div>
 
         </form>
 
       <form method=GET action="{{url_for('blog')}}">
         <div class="control-group">
-          <label class="login-field-icon fui-user" for="login-name"></label>
-          <button type="submit" class="login-field">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-large btn-block">Cancel</button>
         </div>
       </form>
 
