@@ -7,16 +7,10 @@ import time
 app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'blog'
-<<<<<<< HEAD
 app.config['MONGO_URI'] = 'mongodb://dushyant7917:abc123@ds019471.mlab.com:19471/blog'
 # app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog' //for local db
-=======
-app.config['MONGO_URI'] = 'mongodb://dushyant7917:abc123@ds149207.mlab.com:49207/colour_game'
-# 'mongodb://localhost:27017/blog'
->>>>>>> d9fcc886a9f2d92d68f57dd465d3322d45a654e9
 
 mongo = PyMongo(app)
-
 
 @app.route('/')
 def index():
@@ -163,8 +157,5 @@ def register():
 if __name__ == '__main__':
     app.secret_key = 'dushyant7917'
     port = int(os.environ.get("PORT", 5000))
-<<<<<<< HEAD
-    app.run(host='0.0.0.0', port=port, debug = True)
-=======
     app.run(host='0.0.0.0', port=port)
->>>>>>> d9fcc886a9f2d92d68f57dd465d3322d45a654e9
+
