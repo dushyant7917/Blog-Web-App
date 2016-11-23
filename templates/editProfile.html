@@ -4,10 +4,15 @@
 <meta charset='utf-8'>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/static/indexStyle.css">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<link rel="shortcut icon" type="image/x-icon" href="/static/blog.png">
 <link rel="stylesheet" href="/static/login.css">
 <link rel="stylesheet" href="/static/indexGoogle1.css">
 <link rel="stylesheet" href="/static/indexGoogle2.css">
 <link rel="stylesheet" href="/static/indexCloudfare.css">
+<link rel="stylesheet" href="/static/fontAwesome.css">
+
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 .w3-navbar,h1,button {font-family: "Montserrat", sans-serif}
@@ -22,9 +27,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
       <a class="w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
     </li>
     <li class="w3-hide-small"><a href="{{url_for('blog')}}" class="w3-padding-large w3-hover-white">Blogs</a></li>
-    <li ><a href="{{url_for('profile')}}" class="w3-padding-large w3-white">Profile</a></li>
-    <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">New Blog</a></li>
+    <li><a href="{{url_for('profile')}}" class="w3-padding-large w3-white">Profile</a></li>
+    <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">Post Blog</a></li>
     <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
+    <li><a href="{{url_for('beta')}}" class="w3-padding-large w3-white">Beta Version</a></li>
   </ul>
 
   <!-- Navbar on small screens -->
@@ -32,7 +38,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
     <ul class="w3-navbar w3-left-align w3-large w3-black">
       <li><a class="w3-padding-large" href="{{url_for('blog')}}">Blogs</a></li>
       <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
-      <li><a class="w3-padding-large" href="{{url_for('addBlog')}}">New Blog</a></li>
+      <li><a class="w3-padding-large" href="{{url_for('addBlog')}}">Post Blog</a></li>
       <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
     </ul>
   </div>
@@ -41,7 +47,6 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 <!-- Header -->
 <header class="w3-container w3-red w3-center w3-padding-128">
   <h1 class="w3-margin w3-jumbo">{{session['username']}}</h1>
-  <h5><img src={{details['pic']}} height="250" width="250"><img></h5>
 </header>
 
 <div class="w3-container w3-black w3-center w3-opacity w3-padding-64">
@@ -50,22 +55,27 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 
     <div class="control-group">
       <label class="login-field-icon fui-user" for="login-name"></label>
-      <input type="text" class="login-field" value="" placeholder="Name" name="name" required>
+      <input type="text" class="login-field" value="{{details['name']}}" placeholder="Name" name="name" required>
     </div>
 
     <div class="control-group">
       <label class="login-field-icon fui-user" for="login-name"></label>
-      <input type="text" class="login-field" value="" placeholder="Age" name="age" required>
+      <input type="text" class="login-field" value="{{details['about']}}" placeholder="About" name="about" required>
     </div>
 
     <div class="control-group">
       <label class="login-field-icon fui-user" for="login-name"></label>
-      <input type="text" class="login-field" value="" placeholder="Profession" name="profession" required>
+      <input type="text" class="login-field" value="{{details['dob']}}" placeholder="Date of Birth" name="dob" required>
+    </div>
+
+    <div class="control-group">
+      <label class="login-field-icon fui-user" for="login-name"></label>
+      <input type="text" class="login-field" value="{{details['profession']}}" placeholder="Profession" name="profession" required>
     </div>
 
     <div class="control-group">
         <label class="login-field-icon fui-user" for="login-name"></label>
-        <input type="text" class="login-field" value="" placeholder="Profile Pic URL" name="pic" required>
+        <input type="text" class="login-field" value="{{details['pic']}}" placeholder="Profile Pic URL" name="pic" required>
     </div>
 
     <button type="submit" class="btn btn-primary btn-large btn-block">Save</button>
@@ -81,13 +91,14 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 
 
 
+
 <!-- Footer -->
-<footer class="w3-container w3-padding-64 w3-center w3-opacity">
+<footer class="w3-container w3-padding-64 w3-center w3-grey">
   <div class="w3-xlarge w3-padding-32">
-   <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-red"><img src="/static/in.png" height="30px" width="30px"></a>
-   <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/gh.png" height="30px" width="30px"></a>
+    <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/in.png" height="30px" width="30px"></a>
+    <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img class="w3-circle" src="/static/gh.png" height="30px" width="30px"></a>
  </div>
- <p>Powered by <a href="https://github.com/dushyant7917" target="_blank">dushyant7917</a></p>
+ <p>Designed by dushyant7917</p>
 </footer>
 
 <script>
