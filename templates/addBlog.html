@@ -1,92 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html style="background:url(images/bg.png) repeat" class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
+<head>
 <title>dushyant7917 BLOG</title>
 <meta charset='utf-8'>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
 <link rel="stylesheet" href="/static/indexStyle.css">
 <link rel="stylesheet" href="/static/indexGoogle1.css">
 <link rel="stylesheet" href="/static/indexGoogle2.css">
 <link rel="stylesheet" href="/static/indexCloudfare.css">
 <link rel="stylesheet" href="/static/login.css">
+<link rel="stylesheet" href="/static/fontAwesome.css">
+
+<link rel="stylesheet" type="text/css" href="/static/projects.min.css">
+<link rel="stylesheet" type="text/css" href="/static/taggle.css">
 <script src="/static/jquery-2.2.3.js"></script>
 <script src="/static/tinymce.min.js"></script>
 <script src="/static/jquery.tinymce.min.js"></script>
 
+</head>
+
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+header,h3{margin-top:40px !important}
 .w3-navbar,h1,button {font-family: "Montserrat", sans-serif}
 .fa-anchor,.fa-coffee {font-size:200px}
 </style>
-<body>
 
-<!-- Navbar -->
-<div class="w3-top">
-  <ul class="w3-navbar w3-red w3-card-2 w3-left-align w3-large">
-    <li class="w3-hide-medium w3-hide-large w3-opennav w3-right">
-      <a class="w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-    </li>
-    <li><a href="{{url_for('blog')}}" class="w3-padding-large w3-white">Adding Blog</a></li>
-    <li class="w3-hide-small"><a href="{{url_for('blog')}}" class="w3-padding-large w3-hover-white">Blogs</a></li>
-    <li class="w3-hide-small"><a href="{{url_for('profile')}}" class="w3-padding-large w3-hover-white">Profile</a></li>
-    <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
-  </ul>
+<body class="w3-light-grey">
 
-  <!-- Navbar on small screens -->
-  <div id="navDemo" class="w3-hide w3-hide-large w3-hide-medium">
-    <ul class="w3-navbar w3-left-align w3-large w3-black">
-      <li><a class="w3-padding-large" href="{{url_for('blog')}}">Blogs</a></li>
-      <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
-      <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
+
+  <!-- Navbar -->
+  <div class="w3-top">
+    <ul class="w3-navbar w3-blue w3-card-2 w3-left-align w3-large">
+      <li class="w3-hide-medium w3-hide-large w3-opennav w3-right">
+        <a class="w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+      </li>
+      <li class="w3-hide-small"><a href="{{url_for('blog')}}" class="w3-padding-large w3-hover-white">Blogs</a></li>
+      <li class="w3-hide-small"><a href="{{url_for('profile')}}" class="w3-padding-large w3-hover-white">Profile</a></li>
+      <li><a href="#" class="w3-padding-large w3-white">Post Blog</a></li>
+      <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
+      <li><a href="{{url_for('beta')}}" class="w3-padding-large w3-white">Beta Version</a></li>
     </ul>
+
+    <!-- Navbar on small screens -->
+    <div id="navDemo" class="w3-hide w3-hide-large w3-hide-medium">
+      <ul class="w3-navbar w3-left-align w3-large w3-black">
+        <li><a class="w3-padding-large" href="{{url_for('blog')}}">Blogs</a></li>
+        <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
+        <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
+      </ul>
+    </div>
   </div>
-</div>
 
-<!-- Header -->
-<header class="w3-container w3-red w3-center w3-padding-128">
 
-      <form method="POST" action="{{url_for('addBlog')}}">
-
-        ARTICLE  TITLE <br><input type="text" placeholder="Title" name="title" required><hr>
-
-        PICTURE  URL <br><input type="text" placeholder="Paste Picture URL" name="art_pic" required><hr>
-
-        <textarea id="typeText" name="editor1">Write here...</textarea><hr>
-        <script>
-            tinymce.init({
-                selector:'#typeText',
-                browser_spellcheck: true,
-                height: 325,
-                max_width: 1000,
-                statusbar: false,
-                plugins: [
-                    'image charmap preview searchreplace code fullscreen media table paste spellchecker'
-                ]
-            });
-        </script>
-
-          <div lass="control-group">
-            <button type="submit" class="btn btn-primary btn-large btn-block" onclick="addBlog()">Submit</button><br>
-          </div>
-
-        </form>
-
-      <form method=GET action="{{url_for('blog')}}">
-        <div class="control-group">
-          <button type="submit" class="btn btn-primary btn-large btn-block">Cancel</button>
-        </div>
-      </form>
-
+<header class="w3-container w3-light-grey w3-center">
+<h3><span class="w3-tag">Post something new!</span></h3>
 </header>
 
+<section>
+<div class="project" role="main">
 
+    <div style="display: none" class="input textarea clearfix example1"></div>
+    <div style="display: none" class="input textarea clearfix example2"></div>
+    <div style="display: none" class="input textarea clearfix example3"></div>
+
+    <form method="POST" action="{{url_for('addBlog')}}">
+
+    <section>
+        <article class="block">
+            <h5>Title</h5>
+            <input class="input textarea" type="text" placeholder="Article Title" name="title" value="" required>
+            <h5>Image</h5>
+            <input class="input textarea" type="text" placeholder="Paste URL of article image" name="art_pic" value="" required>
+            <h5>Article</h5>
+            <textarea id="typeText" name="editor1"></textarea><hr>
+            <script>
+                tinymce.init({
+                    selector:'#typeText',
+                    browser_spellcheck: true,
+                    height: 325,
+                    max_width: 1000,
+                    statusbar: false,
+                    plugins: [
+                        'image charmap preview searchreplace code fullscreen media table paste spellchecker'
+                    ]
+                });
+            </script>
+            <h5>Tags</h5>
+            <div class="input textarea clearfix example4"></div>
+        </article>
+    </section>
+
+    <input type="hidden" id="myTags" name="tags" value="">
+    <script>
+        function addTags() {
+        var tags = document.getElementsByName('taggles[]');
+        var i;
+        var ll = "";
+        for (i = 0; i <	tags.length; i++) {
+          if (i !== tags.length - 1 )
+   	      ll += (tags[i].value + ";");
+          else {
+            ll += (tags[i].value)
+          }
+        }
+        document.getElementById('myTags').value = ll;
+        }
+    </script>
+
+    <div lass="control-group">
+      <button type="submit" class="btn btn-primary btn-large btn-block" onclick="addTags();">Post</button><br>
+    </div>
+    </form>
+
+</div>
+</section>
 
 <!-- Footer -->
-<footer class="w3-container w3-padding-64 w3-center w3-opacity">
+<footer class="w3-container w3-padding-64 w3-center w3-grey">
   <div class="w3-xlarge w3-padding-32">
-    <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-red"><img src="/static/in.png" height="30px" width="30px"></a>
-    <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/gh.png" height="30px" width="30px"></a>
+    <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/in.png" height="30px" width="30px"></a>
+    <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img class="w3-circle" src="/static/gh.png" height="30px" width="30px"></a>
  </div>
- <p>Powered by <a href="https://github.com/dushyant7917" target="_blank">dushyant7917</a></p>
+ <p>Designed by dushyant7917</p>
 </footer>
 
 <script>
@@ -100,6 +139,12 @@ function myFunction() {
     }
 }
 </script>
+
+<script src="/static/jquery-1.10.1.js"></script>
+<script src="/static/jquery-ui.js"></script>
+<script src="/static/taggle.min.js"></script>
+<script src="/static/taggle.js"></script>
+<script src="/static/scripts.js"></script>
 
 </body>
 </html>
