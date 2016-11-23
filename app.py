@@ -10,8 +10,6 @@ app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'blog'
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'  # for local db
-app.config['MONGO_URI'] = 'mongodb://dushyant7917:abc123@ds019471.mlab.com:19471/blog'
-# app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog' //for local db
 
 mongo = PyMongo(app)
 
@@ -23,7 +21,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/blog', methods = ['GET', 'POST'])
+@app.route('/blog', methods = ['GET'])
 def blog():
     if request.method == 'GET':
         if 'username' in session:
@@ -33,10 +31,10 @@ def blog():
 
         return render_template('login.html')
 
-    else:
-        comments = mongo.db.comments
-        #comments.insert({'_id':,'number': })
-        return "dff"
+
+@app.route('/beta')
+def beta():
+    return render_template('beta.html')
 
 
 @app.route('/comment/<article_id>', methods = ['POST'])
@@ -96,7 +94,6 @@ def like(article_id):
     if request.method == "GET":
         articles = mongo.db.articles
         item = articles.find_one({'_id': ObjectId(article_id)})
-        print item['likes']
         likes = item['likes']
         articles.update({'_id': ObjectId(article_id)}, {'$set': {'likes': likes + 1}})
         return redirect(url_for('article', article_id = item['_id']))
@@ -155,13 +152,21 @@ def addBlog():
             return render_template('addBlog.html')
         else:
             articles = mongo.db.articles
-            tags = request.form['tags']
-            tags = tags.split(";")
+            tag1 = request.form['tags']
+            tag1 = tag1.split(";")
+            uw = ['these','are','prefilled','tags','try','entering','one','of']
+            tags = []
+            for i in tag1:
+                if i not in uw:
+                    tags.append(i)
+                else:
+                    continue
+
             art = request.form['editor1']
             artTitle = request.form['title']
             artPic = request.form['art_pic']
             date = time.strftime("%B %d,"+" %Y")
-            articles.insert({ 'author': session['username'], 'article': art , 'title': artTitle , 'date': date, 'pic': artPic, 'tags': tags})
+            articles.insert({ 'author': session['username'], 'article': art , 'title': artTitle , 'date': date, 'pic': artPic, 'tags': tags, 'likes': 0})
             return redirect(url_for('blog'))
 
     else:
@@ -213,7 +218,9 @@ def register():
 
             print ("New Username : " + str(request.form['username']))
 
-            return redirect(url_for('index'))
+            message = Markup("Registration Successful! You can login now.")
+            flash(message)
+            return redirect(url_for('login'))
 
         message = Markup("This username is already registered!")
         flash(message)
@@ -228,4 +235,4 @@ def register():
 if __name__ == '__main__':
     app.secret_key = 'dushyant7917'
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug = True)
