@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
-<title>dushyant7917 BLOG</title>
+<title>Profile</title>
 <meta charset='utf-8'>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<link rel="shortcut icon" type="image/x-icon" href="/static/blog.png">
 <link rel="stylesheet" href="/static/indexStyle.css">
 <link rel="stylesheet" href="/static/indexGoogle1.css">
 <link rel="stylesheet" href="/static/indexGoogle2.css">
 <link rel="stylesheet" href="/static/indexCloudfare.css">
+<link rel="stylesheet" href="/static/fontAwesome.css">
+
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 .w3-navbar,h1,button {font-family: "Montserrat", sans-serif}
@@ -22,8 +27,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
     </li>
     <li class="w3-hide-small"><a href="{{url_for('blog')}}" class="w3-padding-large w3-hover-white">Blogs</a></li>
     <li ><a href="{{url_for('profile')}}" class="w3-padding-large w3-white">Profile</a></li>
-    <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">New Blog</a></li>
+    <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">Post Blog</a></li>
     <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
+    <li><a href="{{url_for('beta')}}" class="w3-padding-large w3-white">Beta Version</a></li>
   </ul>
 
   <!-- Navbar on small screens -->
@@ -31,45 +37,81 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
     <ul class="w3-navbar w3-left-align w3-large w3-black">
       <li><a class="w3-padding-large" href="{{url_for('blog')}}">Blogs</a></li>
       <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
-      <li><a class="w3-padding-large" href="{{url_for('addBlog')}}">New Blog</a></li>
+      <li><a class="w3-padding-large" href="{{url_for('addBlog')}}">Post Blog</a></li>
       <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
     </ul>
   </div>
 </div>
 
 <!-- Header -->
-<header class="w3-container w3-red w3-center w3-padding-128">
-  <h1 class="w3-margin w3-jumbo">{{session['username']}}</h1>
-  <h5><img src={{details['pic']}} height="250" width="250" ><img></h5>
-  <a href="{{url_for('editProfile')}}"><button class="w3-btn w3-padding-16 w3-large w3-margin-top">Edit Profile</button></a>
+<header class="w3-container w3-blue w3-center">
+<div class="w3-row">
+
+  <div class="w3-half w3-container w3-center">
+    <div class="w3-padding-64">
+        <hr>
+        <h3 style="text-align:left; padding-left:80px">Name : {{ details['name'] }}</h3><hr>
+        <h3 style="text-align:left; padding-left:80px">About : {{ details['about'] }}</h3><hr>
+        <h3 style="text-align:left; padding-left:80px">Date of Birth : {{ details['dob'] }}</h3><hr>
+        <h3 style="text-align:left; padding-left:80px">Profession : {{ details['profession'] }}</h3><hr>
+    </div>
+  </div>
+  <div class="w3-half w3-container w3-center">
+    <div class="w3-padding-64">
+        <h1>{{session['username']}}</h1>
+        <h5><img src={{details['pic']}} class="w3-margin w3-circle" alt="/static/defaultProfilePic.png" height="250" width="250" ><img></h5>
+        <a href="{{url_for('editProfile', username = session['username'])}}">
+        <button class="w3-btn w3-padding-16 w3-large w3-margin-top">Edit Profile</button></a>
+    </div>
+  </div>
+
+</div>
 </header>
 
+<div class="w3-container w3-center">
+  <br>
+  <br>
+  <h1> Your Blog History ... </h1>
+  <br>
+</div>
 
 
-<!-- First Grid -->
-<div class="w3-row-padding w3-padding-64 w3-container">
-  <div class="w3-content">
 
-    <div class="w3-twothird">
-      <h2 class="w3-padding-32">Username : {{ details['username'] }}</h2>
-      <h2 class="w3-padding-32">Name : {{ details['name'] }}</h2>
-      <h2 class="w3-padding-32">Age : {{ details['age'] }}</h2>
-      <h2 class="w3-padding-32">Profession : {{ details['profession'] }}</h2>
+<!-- Grid -->
+<div class="w3-row-padding  w3-container">
+{% for pc,tt,dt in blogs %}
+  <div class="w3-card-4 w3-light-grey" style="padding:20px; width:80%; margin: 0 auto" >
+    <div class="w3-row">
+
+      <div class="w3-half w3-container w3-center">
+        <div>
+          <img src="{{pc}}" alt="" style="width:300px; height:300px; float:left">
+        </div>
+      </div>
+      <div class="w3-half w3-container w3-center">
+        <div>
+          <h1>{{tt}}</h1>
+          <h5><span class="w3-opacity">{{dt}}</span></h5><br>
+          <p id="demo"><button onclick="edt();" class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b>Edit &raquo;</b></button></p>
+        </div>
+        </div>
+
     </div>
-
   </div>
 </div>
+  <br>
+{% endfor %}
 
 
 
 
 <!-- Footer -->
-<footer class="w3-container w3-padding-64 w3-center w3-opacity">
+<footer class="w3-container w3-padding-64 w3-center w3-grey">
   <div class="w3-xlarge w3-padding-32">
-    <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-red"><img src="/static/in.png" height="30px" width="30px"></a>
-    <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/gh.png" height="30px" width="30px"></a>
+    <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/in.png" height="30px" width="30px"></a>
+    <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img class="w3-circle" src="/static/gh.png" height="30px" width="30px"></a>
  </div>
- <p>Powered by <a href="https://github.com/dushyant7917" target="_blank">dushyant7917</a></p>
+ <p>Designed by dushyant7917</p>
 </footer>
 
 <script>
