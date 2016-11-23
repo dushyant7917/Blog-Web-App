@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<title>dushyant7917 BLOG</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<link rel="shortcut icon" type="image/x-icon" href="/static/blog.png">
+<link rel="stylesheet" href="/static/indexStyle.css">
+<link rel="stylesheet" href="/static/indexGoogle1.css">
+<link rel="stylesheet" href="/static/indexGoogle2.css">
+<link rel="stylesheet" href="/static/indexCloudfare.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="/static/fontAwesome.css">
+
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+.w3-navbar,h1,button {font-family: "Montserrat", sans-serif}
+.fa-anchor,.fa-coffee {font-size:200px}
+</style>
+<body class="w3-light-grey">
+
+  <!-- Navbar -->
+  <div class="w3-top">
+    <ul class="w3-navbar w3-red w3-card-2 w3-left-align w3-large">
+      <li class="w3-hide-medium w3-hide-large w3-opennav w3-right">
+        <a class="w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+      </li>
+      <li class="w3-hide-small"><a href="{{url_for('blog')}}" class="w3-padding-large w3-hover-white">Blogs</a></li>
+      <li class="w3-hide-small"><a href="{{url_for('profile')}}" class="w3-padding-large w3-hover-white">Profile</a></li>
+      <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">Post Blog</a></li>
+      <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
+      <li><a href="{{url_for('beta')}}" class="w3-padding-large w3-white">Beta Version</a></li>
+    </ul>
+
+    <!-- Navbar on small screens -->
+    <div id="navDemo" class="w3-hide w3-hide-large w3-hide-medium">
+      <ul class="w3-navbar w3-left-align w3-large w3-black">
+        <li><a class="w3-padding-large" href="{{url_for('blog')}}">Blogs</a></li>
+        <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
+        <li><a class="w3-padding-large" href="{{url_for('addBlog')}}">Post Blog</a></li>
+        <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+
+<div class="w3-content" style="max-width:1400px">
+
+<!-- Header -->
+<header class="w3-container w3-center w3-padding-32">
+  <br>
+  <h1><b>{{item['title']}}</b></h1>
+  <p>Welcome to the blog of <span class="w3-tag">{{item['author']}}</span></p>
+</header>
+
+<!-- Grid -->
+<div class="w3-row">
+
+<!-- Blog entries -->
+<div class="w3-col l8 s12">
+  <!-- Blog entry -->
+  <div class="w3-card-4 w3-margin w3-white">
+    <img src="{{ item['pic']}}" alt="Nature" style="width:100%; height:500px">
+    <div class="w3-container w3-padding-8">
+      <h5><span class="w3-opacity">{{item['date']}}</span></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>{{item['article'] | safe}}</p>
+      <div class="w3-row">
+        <div class="w3-col m8 s12">
+          <p id="demo">
+            <button onclick="chg();" class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b>Comment &raquo;</b></button>
+            <button class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b><a href="{{url_for('like', article_id = item['_id'])}}"><img src="/static/like1.png" height="22px" width="40px"></img></a> {{item['likes']}}</b></button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+
+<script>
+function chg() {
+var commentForm = "<h3>Write your comment here...</h3><form method='POST' action='{{url_for('comment', article_id = item['_id'])}}'><textarea name='comment' rows='2' cols='60' required></textarea><br><input type='Submit'><button onclick='cl();'>Cancel</button></form>";
+document.getElementById("demo").innerHTML = commentForm;
+}
+function cl() {
+var closeButton = "<button onclick='chg();' class='w3-btn w3-padding-large w3-white w3-border w3-hover-border-black'><b>Comment &raquo;</b></button><button class='w3-btn w3-padding-large w3-white w3-border w3-hover-border-black'><b><a href='{{url_for('like', article_id = item['_id'])}}'><img src='/static/like1.png' height='22px' width='40px'></img></a> {{item['likes']}}</b></button>";
+document.getElementById("demo").innerHTML = closeButton;
+}
+</script>
+
+<div class="w3-card-4 w3-margin w3-white">
+  <div class="w3-container w3-padding-8">
+    <h2>Comments Section</h2>
+    <hr>
+  </div>
+
+{% for cN,cC,cD,cP in comment_data %}
+  <div class="w3-container">
+    <img src="{{cP}}" height="50px" width="50px"  style='float:left; margin-right:20px'><span style="font-weight:bold;font-size:12px">  {{cN}}</span><br><span >{{cC}}</span><p style="font-size:12px"> {{cD}}</p></img>
+    <hr>
+  </div>
+{% endfor %}
+</div>
+
+<!-- END BLOG ENTRIES -->
+</div>
+
+
+
+<!-- Introduction menu -->
+<div class="w3-col l4">
+  <!-- About Card -->
+  <div class="w3-card-2 w3-margin">
+  <img src="{{author['pic']}}" style="width:100%" height="100%">
+    <div class="w3-container w3-padding">
+      <h4><b>Author Profile</b></h4>
+      </div>
+      <div class="w3-container w3-white">
+      <p><span class="w3-tag">Name</span> {{author['name']}}</p>
+      <p><span class="w3-tag">About</span> {{author['about']}}</p>
+      <p><span class="w3-tag">Date of Birth</span> {{author['dob']}}</p>
+      <p><span class="w3-tag">Profession</span> {{author['profession']}}</p>
+    </div>
+  </div><hr>
+
+
+  <!-- Labels / tags -->
+  <div class="w3-card-2 w3-margin">
+    <div class="w3-container w3-padding">
+      <h4><strong>Tags</strong></h4>
+    </div>
+    <div class="w3-container w3-white">
+    <p>
+      {% for tag in item['tags']%}
+      <span class="w3-tag w3-grey w3-margin-bottom">{{tag}}</span>
+      {% endfor %}
+    </p>
+    </div>
+  </div>
+
+<!-- END Introduction Menu -->
+</div>
+
+
+<!-- END GRID -->
+</div><br>
+
+<!-- END w3-content -->
+</div>
+
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-center w3-grey">
+  <div class="w3-xlarge w3-padding-32">
+    <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/in.png" height="30px" width="30px"></a>
+    <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img class="w3-circle" src="/static/gh.png" height="30px" width="30px"></a>
+ </div>
+ <p>Designed by dushyant7917</p>
+</footer>
+
+<script>
+// Used to toggle the menu on small screens when clicking on the menu button
+function myFunction() {
+    var x = document.getElementById("navDemo");
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+    }
+}
+</script>
+
+</body>
+</html>
