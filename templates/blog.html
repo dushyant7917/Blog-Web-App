@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>dushyant7917 BLOG</title>
+<title>Blogs</title>
 	<meta charset="utf-8">
 	<!-- Always force latest IE rendering engine & Chrome Frame -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="/static/indexStyle.css">
   <link rel="stylesheet" href="/static/indexGoogle1.css">
   <link rel="stylesheet" href="/static/indexGoogle2.css">
-  <link rel="stylesheet" href="/static/indexCloudfare.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="/static/fontAwesome.css">
 
@@ -34,22 +34,29 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
       <li class="w3-hide-small"><a href="{{url_for('profile')}}" class="w3-padding-large w3-hover-white">Profile</a></li>
       <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">Post Blog</a></li>
       <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
-			<li><a href="{{url_for('beta')}}" class="w3-padding-large w3-white">Beta Version</a></li>
-    </ul>
+	  </ul>
 
     <!-- Navbar on small screens -->
     <div id="navDemo" class="w3-hide w3-hide-large w3-hide-medium">
       <ul class="w3-navbar w3-left-align w3-large w3-black">
         <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
         <li><a class="w3-padding-large" href="{{url_for('addBlog')}}">Post Blog</a></li>
-        <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
+        <li><a class="w3-padding-large" href="{{url_for('logout')}}">Logout</a></li>
       </ul>
     </div>
   </div>
 
-	<header class="w3-container w3-center w3-padding-32">
-	  <br>
-	  <p>Welcome to the blog web-app of <span class="w3-tag"> dushyant7917</span></p>
+	<header class="w3-container w3-red w3-center">
+	  <br><br><br><br>
+	  <h5 style="color:black"><strong>Welcome to the blog web-app of dushyant7917</strong></h5>
+		<br>
+		<form method="POST" action="{{url_for('search')}}"
+		<span>
+			<input type="text" class="w3-search" value="" placeholder=" search for blogs" name="query" style="width:300px;height:30px">
+			<button class="w3-btn w3-small">Search</button>
+		</span>
+  	</form>
+		<br><br>
 	</header>
 
 
@@ -64,10 +71,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 			<div class="w3-white" style="height: 100%">
       <img src="{{item['pic']}}" alt="" style="width:100%; height:300px">
       <div class="w3-container w3-white">
-				<div style="height:40px"><p><b>{{item['title']}}</b></p></div>
-        <p>{{item['article'][0:160] | safe}} ...</p>
+				<div style="height:50px"><p><b>{{item['title']}}</b></p></div>
 				<a href="{{url_for('article', article_id = item['_id'])}}">
-				<button class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b>READ MORE &raquo;</b></button>
+				<button class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b>READ &raquo;</b></button>
 				</a>
       </div>
 			</div>
@@ -79,16 +85,13 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 </div>
 
 
-
-
-
 <!-- Footer -->
 <footer class="w3-container w3-padding-64 w3-center w3-grey">
   <div class="w3-xlarge w3-padding-32">
     <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/in.png" height="30px" width="30px"></a>
     <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img class="w3-circle" src="/static/gh.png" height="30px" width="30px"></a>
  </div>
- <p>Designed by dushyant7917</p>
+ <p>Designed by <a href="https://dushyant7917resume.herokuapp.com/" style="text-decoration:none"><strong>dushyant7917</strong></a></p>
 </footer>
 
 <script>
