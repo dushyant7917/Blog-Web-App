@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>dushyant7917 BLOG</title>
+<title>Article</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="HandheldFriendly" content="True">
@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="/static/indexStyle.css">
 <link rel="stylesheet" href="/static/indexGoogle1.css">
 <link rel="stylesheet" href="/static/indexGoogle2.css">
-<link rel="stylesheet" href="/static/indexCloudfare.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="/static/fontAwesome.css">
 
@@ -30,7 +30,6 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       <li class="w3-hide-small"><a href="{{url_for('profile')}}" class="w3-padding-large w3-hover-white">Profile</a></li>
       <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">Post Blog</a></li>
       <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
-      <li><a href="{{url_for('beta')}}" class="w3-padding-large w3-white">Beta Version</a></li>
     </ul>
 
     <!-- Navbar on small screens -->
@@ -39,7 +38,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <li><a class="w3-padding-large" href="{{url_for('blog')}}">Blogs</a></li>
         <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
         <li><a class="w3-padding-large" href="{{url_for('addBlog')}}">Post Blog</a></li>
-        <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
+        <li><a class="w3-padding-large" href="{{url_for('logout')}}">Logout</a></li>
       </ul>
     </div>
   </div>
@@ -60,7 +59,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <div class="w3-col l8 s12">
   <!-- Blog entry -->
   <div class="w3-card-4 w3-margin w3-white">
-    <img src="{{ item['pic']}}" alt="Nature" style="width:100%; height:500px">
+    <img src="{{item['pic']}}" alt="Nature" style="width:100%; height:500px">
     <div class="w3-container w3-padding-8">
       <h5><span class="w3-opacity">{{item['date']}}</span></h5>
     </div>
@@ -98,7 +97,7 @@ document.getElementById("demo").innerHTML = closeButton;
 
 {% for cN,cC,cD,cP in comment_data %}
   <div class="w3-container">
-    <img src="{{cP}}" height="50px" width="50px"  style='float:left; margin-right:20px'><span style="font-weight:bold;font-size:12px">  {{cN}}</span><br><span >{{cC}}</span><p style="font-size:12px"> {{cD}}</p></img>
+    <img src="{{cP}}" height="50px" width="50px"  style='float:left; margin-right:20px'><span style="font-weight:bold;font-size:12px;color:blue">  {{cN}}</span><br><span >{{cC}}</span><p style="font-size:12px;color:grey"> {{cD}}</p></img>
     <hr>
   </div>
 {% endfor %}
@@ -123,7 +122,30 @@ document.getElementById("demo").innerHTML = closeButton;
       <p><span class="w3-tag">Date of Birth</span> {{author['dob']}}</p>
       <p><span class="w3-tag">Profession</span> {{author['profession']}}</p>
     </div>
-  </div><hr>
+  </div>
+  <hr>
+
+  <!-- Posts -->
+  <div class="w3-card-2 w3-margin">
+    <div class="w3-container w3-padding">
+      <h4><b>Other Posts</b></h4>
+    </div>
+    <ul class="w3-ul w3-hoverable w3-white">
+      {% for op in other_posts %}
+      {% if op['_id'] != item['_id'] %}
+      <a href="{{url_for('article', article_id = op['_id'])}}" style="text-decoration:none">
+      <li class="w3-padding-16">
+        <img src="{{op['pic']}}" alt="Image" class="w3-left w3-margin-right" style="height:70px;width:70px">
+        <span>{{op['date']}}</span><br>
+        <span><b>{{op['title']}}</b></span>
+      </li>
+      </a>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+  <hr>
+
 
 
   <!-- Labels / tags -->
@@ -133,8 +155,16 @@ document.getElementById("demo").innerHTML = closeButton;
     </div>
     <div class="w3-container w3-white">
     <p>
-      {% for tag in item['tags']%}
-      <span class="w3-tag w3-grey w3-margin-bottom">{{tag}}</span>
+      {% for tag in UT %}
+      {% if tag['tag'] not in item['tags'] %}
+      <a href="{{url_for('searchTag', search_text = tag['tag'])}}" style="text-decoration:none">
+      <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">{{tag['tag']}}</span>
+      </a>
+      {% else %}
+      <a href="{{url_for('searchTag', search_text = tag['tag'])}}" style="text-decoration:none">
+      <span class="w3-tag w3-margin-bottom">{{tag['tag']}}</span>
+      </a>
+      {% endif %}
       {% endfor %}
     </p>
     </div>
@@ -157,7 +187,7 @@ document.getElementById("demo").innerHTML = closeButton;
     <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/in.png" height="30px" width="30px"></a>
     <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img class="w3-circle" src="/static/gh.png" height="30px" width="30px"></a>
  </div>
- <p>Designed by dushyant7917</p>
+ <p>Designed by <a href="https://dushyant7917resume.herokuapp.com/" style="text-decoration:none"><strong>dushyant7917</strong></a></p>
 </footer>
 
 <script>
