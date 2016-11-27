@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html style="background:url(images/bg.png) repeat" class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
+<html>
 <head>
-<title>dushyant7917 BLOG</title>
+<title>New Post</title>
 <meta charset='utf-8'>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
+<link rel="shortcut icon" type="image/x-icon" href="/static/blog.png">
 <link rel="stylesheet" href="/static/indexStyle.css">
 <link rel="stylesheet" href="/static/indexGoogle1.css">
 <link rel="stylesheet" href="/static/indexGoogle2.css">
-<link rel="stylesheet" href="/static/indexCloudfare.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/static/login.css">
 <link rel="stylesheet" href="/static/fontAwesome.css">
 
@@ -40,9 +41,8 @@ header,h3{margin-top:40px !important}
       </li>
       <li class="w3-hide-small"><a href="{{url_for('blog')}}" class="w3-padding-large w3-hover-white">Blogs</a></li>
       <li class="w3-hide-small"><a href="{{url_for('profile')}}" class="w3-padding-large w3-hover-white">Profile</a></li>
-      <li><a href="#" class="w3-padding-large w3-white">Post Blog</a></li>
+      <li><a href="#" class="w3-padding-large w3-white">New Blog</a></li>
       <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
-      <li><a href="{{url_for('beta')}}" class="w3-padding-large w3-white">Beta Version</a></li>
     </ul>
 
     <!-- Navbar on small screens -->
@@ -50,7 +50,7 @@ header,h3{margin-top:40px !important}
       <ul class="w3-navbar w3-left-align w3-large w3-black">
         <li><a class="w3-padding-large" href="{{url_for('blog')}}">Blogs</a></li>
         <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
-        <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
+        <li><a class="w3-padding-large" href="{{url_for('logout')}}">Logout</a></li>
       </ul>
     </div>
   </div>
@@ -125,7 +125,7 @@ header,h3{margin-top:40px !important}
     <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/in.png" height="30px" width="30px"></a>
     <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img class="w3-circle" src="/static/gh.png" height="30px" width="30px"></a>
  </div>
- <p>Designed by dushyant7917</p>
+ <p>Designed by <a href="https://dushyant7917resume.herokuapp.com/" style="text-decoration:none"><strong>dushyant7917</strong></a></p>
 </footer>
 
 <script>
