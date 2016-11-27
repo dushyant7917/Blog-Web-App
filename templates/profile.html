@@ -2,6 +2,7 @@
 <html>
 <title>Profile</title>
 <meta charset='utf-8'>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -9,7 +10,7 @@
 <link rel="stylesheet" href="/static/indexStyle.css">
 <link rel="stylesheet" href="/static/indexGoogle1.css">
 <link rel="stylesheet" href="/static/indexGoogle2.css">
-<link rel="stylesheet" href="/static/indexCloudfare.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/static/fontAwesome.css">
 
 <style>
@@ -29,7 +30,6 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
     <li ><a href="{{url_for('profile')}}" class="w3-padding-large w3-white">Profile</a></li>
     <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">Post Blog</a></li>
     <li class="w3-hide-small"><a href="{{url_for('logout')}}" class="w3-padding-large w3-hover-white">Logout</a></li>
-    <li><a href="{{url_for('beta')}}" class="w3-padding-large w3-white">Beta Version</a></li>
   </ul>
 
   <!-- Navbar on small screens -->
@@ -38,13 +38,13 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
       <li><a class="w3-padding-large" href="{{url_for('blog')}}">Blogs</a></li>
       <li><a class="w3-padding-large" href="{{url_for('profile')}}">Profile</a></li>
       <li><a class="w3-padding-large" href="{{url_for('addBlog')}}">Post Blog</a></li>
-      <li><a class="w3-padding-large" href="{{url_for('register')}}">Logout</a></li>
+      <li><a class="w3-padding-large" href="{{url_for('logout')}}">Logout</a></li>
     </ul>
   </div>
 </div>
 
 <!-- Header -->
-<header class="w3-container w3-blue w3-center">
+<header class="w3-container w3-light-grey w3-center">
 <div class="w3-row">
 
   <div class="w3-half w3-container w3-center">
@@ -79,7 +79,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 
 <!-- Grid -->
 <div class="w3-row-padding  w3-container">
-{% for pc,tt,dt in blogs %}
+{% for pc,tt,dt,ai in blogs %}
   <div class="w3-card-4 w3-light-grey" style="padding:20px; width:80%; margin: 0 auto" >
     <div class="w3-row">
 
@@ -92,7 +92,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
         <div>
           <h1>{{tt}}</h1>
           <h5><span class="w3-opacity">{{dt}}</span></h5><br>
-          <p id="demo"><button onclick="edt();" class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b>Edit &raquo;</b></button></p>
+            <p id="demo"><a href="{{url_for('editArticle', article_id = ai)}}"><button class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b>Edit &raquo;</b></button></a></p>
         </div>
         </div>
 
@@ -111,7 +111,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
     <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/in.png" height="30px" width="30px"></a>
     <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img class="w3-circle" src="/static/gh.png" height="30px" width="30px"></a>
  </div>
- <p>Designed by dushyant7917</p>
+ <p>Designed by <a href="https://dushyant7917resume.herokuapp.com/" style="text-decoration:none"><strong>dushyant7917</strong></a></p>
 </footer>
 
 <script>
