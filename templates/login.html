@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
-<title>dushyant7917 LOGIN</title>
+<title>Login</title>
 <meta charset='utf-8'>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -10,7 +11,7 @@
 <link rel="stylesheet" href="/static/indexStyle.css">
 <link rel="stylesheet" href="/static/indexGoogle1.css">
 <link rel="stylesheet" href="/static/indexGoogle2.css">
-<link rel="stylesheet" href="/static/indexCloudfare.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/static/fontAwesome.css">
 
 <style>
@@ -31,7 +32,6 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
     <li class="w3-hide-small"><a href="{{url_for('addBlog')}}" class="w3-padding-large w3-hover-white">Post Blog</a></li>
     <li><a href="{{url_for('login')}}" class="w3-padding-large w3-white">Login</a></li>
     <li class="w3-hide-small"><a href="{{url_for('register')}}" class="w3-padding-large w3-hover-white">Register</a></li>
-    <li><a href="{{url_for('beta')}}" class="w3-padding-large w3-hover-white">Beta Version</a></li>
   </ul>
 
   <!-- Navbar on small screens -->
@@ -59,7 +59,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 				<label class="login-field-icon fui-lock" for="login-pass"></label>
 				</div>
 
-        <div class="flashes">
+        <div class="flashes" style="color:{{colour}}">
           {{ get_flashed_messages()[0] }}
         </div>
 
@@ -80,7 +80,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
     <a href="https://www.linkedin.com/in/dushyant7917" class="w3-hover-text-light-blue"><img src="/static/in.png" height="30px" width="30px"></a>
     <a href="https://github.com/dushyant7917" class="w3-hover-text-light-blue"><img class="w3-circle" src="/static/gh.png" height="30px" width="30px"></a>
  </div>
- <p>Designed by dushyant7917</p>
+ <p>Designed by <a href="https://dushyant7917resume.herokuapp.com/" style="text-decoration:none"><strong>dushyant7917</strong></a></p>
 </footer>
 
 
