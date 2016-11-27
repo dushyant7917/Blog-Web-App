@@ -32,9 +32,28 @@ def blog():
         return render_template('login.html')
 
 
-@app.route('/beta')
-def beta():
-    return render_template('beta.html')
+@app.route('/search', methods = ['POST'])
+def search():
+    if 'username' in session:
+        if request.method == 'POST':
+            query = request.form['query']
+            articles = mongo.db.articles
+            results = articles.find({'$text': { '$search': query }}, { "score": { "$meta": "textScore" } }).sort([('score', {'$meta': 'textScore'})]).limit(9)
+            count = articles.find({'$text': { '$search': query }}, { "score": { "$meta": "textScore" } }).sort([('score', {'$meta': 'textScore'})]).limit(9).count()
+            return render_template("search.html", results = results, count = count)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/search/<search_text>', methods = ['GET'])
+def searchTag(search_text):
+    if 'username' in session:
+        articles = mongo.db.articles
+        results = articles.find({'$text': { '$search': search_text }}, { "score": { "$meta": "textScore" } }).sort([('score', {'$meta': 'textScore'})]).limit(9)
+        count = articles.find({'$text': { '$search': search_text }}, { "score": { "$meta": "textScore" } }).sort([('score', {'$meta': 'textScore'})]).limit(9).count()
+        return render_template("search.html", results = results, count = count)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/comment/<article_id>', methods = ['POST'])
@@ -49,9 +68,9 @@ def comment(article_id):
             art_id = hashlib.md5(hash_str).hexdigest()
             date = time.strftime("%B %d,"+" %Y")
             users = mongo.db.users
-            author = users.find_one({'username': item['author']})
+            comment_author = users.find_one({'username': session['username']})
             comments = mongo.db.comments
-            comments.insert({'comment_id': art_id, 'comment': new_comment, 'comment_username': session['username'], 'date': date, 'pic': author['pic']})
+            comments.insert({'comment_id': art_id, 'comment': new_comment, 'comment_username': session['username'], 'date': date, 'pic': comment_author['pic']})
             #articles = mongo.db.articles
 
             return redirect(url_for('article', article_id = article_id))
@@ -72,6 +91,7 @@ def article(article_id):
         art_id = hashlib.md5(hash_str).hexdigest()
         users = mongo.db.users
         author = users.find_one({'username': item['author']})
+        other_posts = articles.find({'author': author['username']})
         comments = mongo.db.comments
         comment_data = comments.find({'comment_id': art_id})
         lC = []
@@ -83,7 +103,9 @@ def article(article_id):
             lD.append(i['date'])
             lC.append(i['comment'])
             lN.append(i['comment_username'])
-        return render_template('article.html', item = item, author = author, comment_data = zip(lN,lC,lD,lP))
+        tags = mongo.db.tags
+        universal_tags = tags.find({})
+        return render_template('article.html', item = item, author = author, comment_data = zip(lN,lC,lD,lP), UT = universal_tags, other_posts = other_posts)
 
     return render_template('login.html')
 
@@ -99,7 +121,7 @@ def like(article_id):
         return redirect(url_for('article', article_id = item['_id']))
 
     else:
-        return "Error!"
+        return "Error! Go back..."
 
 
 @app.route('/profile')
@@ -112,14 +134,50 @@ def profile():
         tt = []
         pc = []
         dt = []
-        smmry = []
+        ai = []
         for i in blogs:
             tt.append(i['title'])
             dt.append(i['date'])
             pc.append(i['pic'])
-        return render_template('profile.html', details = details, blogs = zip(pc,tt,dt))
+            ai.append(i['_id'])
+        return render_template('profile.html', details = details, blogs = zip(pc,tt,dt,ai))
 
     return render_template('login.html')
+
+
+@app.route('/edit/<article_id>', methods = ['GET', 'POST'])
+def editArticle(article_id):
+    if 'username' in session:
+        if request.method == 'GET':
+            article = mongo.db.articles
+            item = article.find_one({'_id': ObjectId(article_id)})
+            return render_template('editArticle.html', item = item)
+        else:
+            articles = mongo.db.articles
+            tag1 = request.form['tags']
+            tag1 = tag1.split(";")
+            uw = ['these','are','prefilled','tags','try','entering','one','of']
+            art_tags = []
+            for i in tag1:
+                if i not in uw:
+                    art_tags.append(i)
+                else:
+                    continue
+
+            tags = mongo.db.tags
+            for t in art_tags:
+                if tags.find_one({'tag': t}) is None:
+                    tags.insert({'tag': t})
+
+            art = request.form['editor1']
+            artTitle = request.form['title']
+            artPic = request.form['art_pic']
+            articles.update({'_id': ObjectId(article_id)}, {'$set': {'article': art , 'title': artTitle , 'pic': artPic, 'tags': art_tags}})
+            return redirect(url_for('profile'))
+
+    else:
+        return redirect(url_for('login'))
+
 
 
 @app.route('/editProfile/<username>', methods=['GET', 'POST'])
@@ -155,10 +213,10 @@ def addBlog():
             tag1 = request.form['tags']
             tag1 = tag1.split(";")
             uw = ['these','are','prefilled','tags','try','entering','one','of']
-            tags = []
+            art_tags = []
             for i in tag1:
                 if i not in uw:
-                    tags.append(i)
+                    art_tags.append(i)
                 else:
                     continue
 
@@ -166,7 +224,12 @@ def addBlog():
             artTitle = request.form['title']
             artPic = request.form['art_pic']
             date = time.strftime("%B %d,"+" %Y")
-            articles.insert({ 'author': session['username'], 'article': art , 'title': artTitle , 'date': date, 'pic': artPic, 'tags': tags, 'likes': 0})
+            tags = mongo.db.tags
+            for t in art_tags:
+                if tags.find_one({'tag': t}) is None:
+                    tags.insert({'tag': t})
+
+            articles.insert({ 'author': session['username'], 'article': art , 'title': artTitle , 'tags': art_tags, 'date': date, 'pic': artPic, 'likes': 0})
             return redirect(url_for('blog'))
 
     else:
@@ -197,7 +260,7 @@ def login():
 
         message = Markup("Invalid username or password!")
         flash(message)
-        return render_template('login.html')
+        return render_template('login.html', colour = "red")
 
     else:
         return render_template('login.html')
@@ -210,24 +273,23 @@ def register():
         users = mongo.db.users
         existing_user = users.find_one({'username': request.form['username']})
 
-        print ("entered username : " + str(request.form['username']))
-
         if existing_user is None:
             hashpass = bcrypt.hashpw(request.form['pass'].encode('utf-8'), bcrypt.gensalt())
-            users.insert({ 'username': request.form['username'], 'password': hashpass, 'pic': '/static/defaultProfilePic.png'})
-
-            print ("New Username : " + str(request.form['username']))
-
-            message = Markup("Registration Successful! You can login now.")
-            flash(message)
-            return redirect(url_for('login'))
+            if request.form['pass'] == request.form['confirm_pass']:
+                users.insert({ 'username': request.form['username'], 'password': hashpass, 'pic': '/static/defaultProfilePic.png'})
+                message = Markup("Registration Successful! You can login now.")
+                flash(message)
+                return render_template('login.html', colour = "black")
+                
+            else:
+                message = Markup("Type same password in both fields!")
+                flash(message)
+                return render_template('register.html', colour = "red")
 
         message = Markup("This username is already registered!")
         flash(message)
 
-        print "Wrong!"
-
-        return render_template('register.html')
+        return render_template('register.html', colour = "red")
 
     return render_template('register.html')
 
