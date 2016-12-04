@@ -56,6 +56,11 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
     </div>
 
     <div class="control-group">
+    <input type="text" class="login-field" value="" placeholder="email" name="email" required>
+    <label class="login-field-icon fui-user" for="login-name"></label>
+    </div>
+
+    <div class="control-group">
     <input type="password" class="login-field" value="" placeholder="password" name="pass" required>
     <label class="login-field-icon fui-lock" for="login-pass"></label>
     </div>
@@ -72,13 +77,12 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
     <div class="control-group">
     <button type="submit" class="btn btn-primary btn-large btn-block">Register</button>
     </div>
-    <a class="login-link" href="{{ url_for('login') }}">Back to login</a>
+    <a class="login-link" href="{{ url_for('login') }}">Already have an account? Back to login</a>
 
     </form>
 
   </div>
 </header>
-
 
 
 <!-- Footer -->
