@@ -71,6 +71,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
           <p id="demo">
             <button onclick="chg();" class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b>Comment &raquo;</b></button>
             <button class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b><a href="{{url_for('like', article_id = item['_id'])}}"><img src="/static/like1.png" height="22px" width="40px"></img></a> {{item['likes']}}</b></button>
+            <b style="color:blue">{{ get_flashed_messages()[0] }}</b>
           </p>
         </div>
       </div>
@@ -139,7 +140,7 @@ document.getElementById("demo").innerHTML = closeButton;
         <span>{{op['date']}}</span><br>
         <span><b>{{op['title']}}</b></span>
       </li>
-      </a>
+    </a><hr>
       {% endif %}
       {% endfor %}
     </ul>
