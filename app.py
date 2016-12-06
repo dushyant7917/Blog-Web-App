@@ -12,15 +12,15 @@ from flask_mail import Mail, Message
 app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'blog'
-app.config['MONGO_URI'] = 'mongodb server url'
-# app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'  # for local db
+app.config['MONGO_URI'] = 'mongodb://dushyant7917:abc123@ds019471.mlab.com:19471/blog'
+#app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'  # for local db
 
 mongo = PyMongo(app)
 
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'dushyant7917official@gmail.com'
-app.config['MAIL_PASSWORD'] = 'sender email id password'
+app.config['MAIL_PASSWORD'] = 'abc123#%()'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
@@ -126,15 +126,28 @@ def article(article_id):
 
 @app.route('/like/<article_id>', methods = ['GET'])
 def like(article_id):
-    if request.method == "GET":
-        articles = mongo.db.articles
-        item = articles.find_one({'_id': ObjectId(article_id)})
-        likes = item['likes']
-        articles.update({'_id': ObjectId(article_id)}, {'$set': {'likes': likes + 1}})
-        return redirect(url_for('article', article_id = item['_id']))
+    if 'username' in session:
+        if request.method == "GET":
+            users = mongo.db.users
+            likeID = users.find_one({'username': session['username']})
+            if article_id not in likeID['liked_articles']:
+                articles = mongo.db.articles
+                item = articles.find_one({'_id': ObjectId(article_id)})
+                likes = item['likes']
+                users = mongo.db.users
+                users.update({'username': session['username']}, {'$push': {'liked_articles': article_id}})
+                articles.update({'_id': ObjectId(article_id)}, {'$set': {'likes': likes + 1}})
+                return redirect(url_for('article', article_id = item['_id']))
+            else:
+                message = Markup("You can click it only once!")
+                flash(message)
+                articles = mongo.db.articles
+                item = articles.find_one({'_id': ObjectId(article_id)})
+                return redirect(url_for('article', article_id = item['_id']))
+
 
     else:
-        return "Error! Go back..."
+        return render_template('login.html')
 
 
 @app.route('/profile')
@@ -300,7 +313,7 @@ def register():
                     hashpass = bcrypt.hashpw(request.form['pass'].encode('utf-8'), bcrypt.gensalt())
                     if request.form['pass'] == request.form['confirm_pass']:
                         token = hashpass.replace('/', '')
-                        users.insert({ 'username': request.form['username'], 'password': 'dushyant7917blogPASSWORD', 'pic': '/static/defaultProfilePic.png', 'email': email, 'token': token, 'secret': hashpass })
+                        users.insert({ 'username': request.form['username'], 'password': 'dushyant7917blogPASSWORD', 'pic': '/static/defaultProfilePic.png', 'email': email, 'token': token, 'secret': hashpass, 'liked_articles': [] })
                         msg = Message('Confirm your account!', sender = 'dushyant7917official@gmail.com', recipients = [email])
                         msg.html = render_template("email.html", username = request.form['username'], token = token)
                         mail.send(msg)
@@ -347,6 +360,6 @@ def verify(username, token):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'your secret key'
+    app.secret_key = 'dushyant7917'
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug = True)
