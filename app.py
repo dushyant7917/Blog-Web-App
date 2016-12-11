@@ -309,7 +309,7 @@ def register():
 
         if existing_user is None:
             if len(request.form['username']) > 3:
-                if re.match(r"^[a-z][a-z0-9._-]+@[a-z]+\.[a-z]{2,3}$", email):
+                if email:
                     hashpass = bcrypt.hashpw(request.form['pass'].encode('utf-8'), bcrypt.gensalt())
                     if request.form['pass'] == request.form['confirm_pass']:
                         token = hashpass.replace('/', '')
