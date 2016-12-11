@@ -12,8 +12,7 @@ from flask_mail import Mail, Message
 app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'blog'
-app.config['MONGO_URI'] = 'mongodb://dushyant7917:abc123@ds019471.mlab.com:19471/blog'
-#app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'  # for local db
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'  # for local db
 
 mongo = PyMongo(app)
 
