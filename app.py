@@ -12,14 +12,14 @@ from flask_mail import Mail, Message
 app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'blog'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'  # for local db
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'  
 
 mongo = PyMongo(app)
 
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'dushyant7917official@gmail.com'
-app.config['MAIL_PASSWORD'] = 'abc123#%()'
+app.config['MAIL_PASSWORD'] = 'password of above email id'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
@@ -359,6 +359,6 @@ def verify(username, token):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'dushyant7917'
+    app.secret_key = 'some secret key'
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug = True)
