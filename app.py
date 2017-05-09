@@ -9,21 +9,37 @@ import pymongo
 import re
 from flask_mail import Mail, Message
 
+#############################################
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+
+server = smtplib.SMTP('smtp.gmail.com', 587)
+server.starttls()
+server.login("dushyant7917official@gmail.com", "abc123#%()")
+
+#############################################
+
 app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'blog'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'  
+app.config['MONGO_URI'] = 'mongodb://dushyant7917:abc123@ds019471.mlab.com:19471/blog'
+# Use below URI for local db
+# app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'
 
 mongo = PyMongo(app)
 
+#############################################################
+'''
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'dushyant7917official@gmail.com'
-app.config['MAIL_PASSWORD'] = 'password of above email id'
+app.config['MAIL_PASSWORD'] = 'abc123#%()'
 app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
-
+'''
+#############################################################
 
 @app.route('/')
 def index():
@@ -36,36 +52,28 @@ def index():
 @app.route('/blog', methods = ['GET'])
 def blog():
     if request.method == 'GET':
-        if 'username' in session:
-            articles = mongo.db.articles
-            content = articles.find().sort([ ('date', pymongo.DESCENDING )])
-            return render_template('blog.html', content = content)
-
-        return render_template('login.html')
+        articles = mongo.db.articles
+        content = articles.find().sort([ ('date', pymongo.DESCENDING )])
+        return render_template('blog.html', content = content)
 
 
 @app.route('/search', methods = ['POST'])
 def search():
-    if 'username' in session:
-        if request.method == 'POST':
-            query = request.form['query']
-            articles = mongo.db.articles
-            results = articles.find({'$text': { '$search': query }}, { "score": { "$meta": "textScore" } }).sort([('score', {'$meta': 'textScore'})]).limit(9)
-            count = articles.find({'$text': { '$search': query }}, { "score": { "$meta": "textScore" } }).sort([('score', {'$meta': 'textScore'})]).limit(9).count()
-            return render_template("search.html", results = results, count = count, query = query)
-    else:
-        return redirect(url_for('login'))
+    if request.method == 'POST':
+        query = request.form['query']
+        articles = mongo.db.articles
+        results = articles.find({'$text': { '$search': query }}, { "score": { "$meta": "textScore" } }).sort([('score', {'$meta': 'textScore'})]).limit(9)
+        count = articles.find({'$text': { '$search': query }}, { "score": { "$meta": "textScore" } }).sort([('score', {'$meta': 'textScore'})]).limit(9).count()
+        return render_template("search.html", results = results, count = count, query = query)
 
 
 @app.route('/search/<search_text>', methods = ['GET'])
 def searchTag(search_text):
-    if 'username' in session:
+    if request.method == 'GET':
         articles = mongo.db.articles
         results = articles.find({'$text': { '$search': search_text }}, { "score": { "$meta": "textScore" } }).sort([('score', {'$meta': 'textScore'})]).limit(9)
         count = articles.find({'$text': { '$search': search_text }}, { "score": { "$meta": "textScore" } }).sort([('score', {'$meta': 'textScore'})]).limit(9).count()
         return render_template("search.html", results = results, count = count, query = search_text)
-    else:
-        return redirect(url_for('login'))
 
 
 @app.route('/comment/<article_id>', methods = ['POST'])
@@ -120,7 +128,6 @@ def article(article_id):
         return render_template('article.html', item = item, author = author, comment_data = zip(lN,lC,lD,lP), UT = universal_tags, other_posts = other_posts)
 
     return render_template('login.html')
-
 
 
 @app.route('/like/<article_id>', methods = ['GET'])
@@ -313,9 +320,212 @@ def register():
                     if request.form['pass'] == request.form['confirm_pass']:
                         token = hashpass.replace('/', '')
                         users.insert({ 'username': request.form['username'], 'password': 'dushyant7917blogPASSWORD', 'pic': '/static/defaultProfilePic.png', 'email': email, 'token': token, 'secret': hashpass, 'liked_articles': [] })
+
+                        #################################
+                        msg = MIMEMultipart('alternative')
+                        msg['From'] = "dushyant7917official@gmail.com"
+                        msg['To'] = email
+                        msg['Subject'] = "Confirm Account!"
+
+                        html = """
+                        <!DOCTYPE html>
+                        <html >
+                          <head>
+                            <meta charset="UTF-8">
+                          </head>
+
+                          <body>
+
+                            <html>
+
+                          <head>
+                            <title>dushyant7917blog - Confirm your account!</title>
+                            <style>
+                              @font-face {
+                                  	font-family: 'Avenir';
+                                  	src: url('../fonts/avenirltstd-heavy-webfont.eot');
+                                  	src: url('../fonts/avenirltstd-heavy-webfont.eot?#iefix') format('embedded-opentype'),
+                                      	 url('../fonts/avenirltstd-heavy-webfont.woff2') format('woff2'),
+                                      	 url('../fonts/avenirltstd-heavy-webfont.woff') format('woff'),
+                                      	 url('../fonts/avenirltstd-heavy-webfont.ttf') format('truetype'),
+                                      	 url('../fonts/avenirltstd-heavy-webfont.svg#webfontregular') format('svg');
+                                  	font-weight: bold;
+                                  	font-style: normal;
+                              	}
+
+                              	@font-face {
+                                  	font-family: 'Avenir';
+                                  	src: url('../fonts/avenirltstd-medium-webfont.eot');
+                                  	src: url('../fonts/avenirltstd-medium-webfont.eot?#iefix') format('embedded-opentype'),
+                                      	url('../fonts/avenirltstd-medium-webfont.woff2') format('woff2'),
+                                 	     	url('../fonts/avenirltstd-medium-webfont.woff') format('woff'),
+                                       	url('../fonts/avenirltstd-medium-webfont.ttf') format('truetype'),
+                                  	    url('../fonts/avenirltstd-medium-webfont.svg#webfontregular') format('svg');
+                                  	font-weight: normal;
+                                  	font-style: normal;
+
+                              	}
+
+                              	@font-face {
+                                 	font-family: 'Avenir';
+                              	    src: url('../fonts/avenirltstd-light-webfont.eot');
+                              	    src: url('../fonts/avenirltstd-light-webfont.eot?#iefix') format('embedded-opentype'),
+                              	         url('../fonts/avenirltstd-light-webfont.woff2') format('woff2'),
+                              	         url('../fonts/avenirltstd-light-webfont.woff') format('woff'),
+                              	         url('../fonts/avenirltstd-light-webfont.ttf') format('truetype'),
+                              	         url('../fonts/avenirltstd-light-webfont.svg#webfontregular') format('svg');
+                              	    font-weight: 100;
+                              	    font-style: normal;
+                              	}
+                              	body{
+                              		background: #ffffff;
+                              		margin: 0px;
+                              		text-align: center;
+                              		font-family: 'Avenir', 'Open Sans', Arial, sans-serif;
+                              	}
+                              	.head{
+                              		background: #488dfb;
+                              		color: #ffffff;
+                              	}
+
+                              	.head h1{
+                              		font-size: 50px;
+                              		font-weight: normal;
+                              		line-height: 100px;
+                              		margin-top: 100px;
+                              	}
+
+                              	.button{
+                              		background: #39ce00;
+                              		color: #ffffff;
+                              		line-height: 50px;
+                              		text-decoration: none;
+                              		text-align: center;
+                              		margin-top: 50px;
+                              		margin-bottom: 50px;
+                              	}
+
+                              	.button a{
+                              		color: #ffffff;
+                              		text-decoration: none;
+                              	}
+                              	a{ color: #fff; }
+                              	p a{ color: #565656; }
+                              	.black a{ color: #000; }
+                            </style>
+                            <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'
+                            type='text/css'>
+                          </head>
+
+                          <body bgcolor="#ffffff">
+                            <table bgcolor="#efefef" cellpadding="0" cellspacing="0" border-collapse="collapse"
+                            width="100%">
+                              <tr>
+                                <td align="center" style="padding: 30px;">
+                                  <table bgcolor="#efefef" cellpadding="0" cellspacing="0" border-collapse="collapse"
+                                  width="700px">
+                                    <tr>
+                                      <td align="center">
+                                        <table cellpadding="0" cellspacing="0" border="0" border-collapse="collapse" width="100%">
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                        </table>
+                                        <table cellpadding="0" cellspacing="0" border="0" border-collapse="collapse" width="100%">
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                        </table>
+
+                                        <table bgcolor="#488dfb" class="head" style="background: #488dfb;" cellpadding="0"
+                                        cellspacing="0" border="0" border-collapse="collapse" width="100%">
+                                          <tr>
+                                            <td style="text-align: center;" colspan="3">
+                                              	<h1>Account Confirmation</h1>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td colspan="3" style="padding: 0px 80px; font-size: 20px; text-align: center;">Hi {0}! Welcome to dushyant7917blog, please confirm your email address to get started.</td>
+                                          </tr>
+                                          <tr>
+                                            <td width="30%">&nbsp;</td>
+                                            <td style="text-align: center;" width="40%">
+                                              <a href="http://dushyant7917blog.herokuapp.com/verification/{1}/{2}" style="font-size: 20px; text-decoration:none">
+                                              <table cellpadding="0" cellspacing="0" border-collapse="collapse" class="button"
+                                              width="100%">
+                                                <tr>
+                                                  <td><b>Confirm your email</b></td>
+                                                </tr>
+                                              </table>
+                                              </a>
+                                            </td>
+                                            <td width="30%">&nbsp;</td>
+                                          </tr>
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                        </table>
+                                        <table cellpadding="0" cellspacing="0" border="0" border-collapse="collapse" width="100%">
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                        </table>
+                                        <table cellpadding="0" cellspacing="0" border="0" border-collapse="collapse" width="100%">
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                          <tr>
+                                            <td>&nbsp;</td>
+                                          </tr>
+                                        </table>
+
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                                <td>&nbsp;</td>
+                              </tr>
+                              <tr>
+                                <td>&nbsp;</td>
+                              </tr>
+                            </table>
+
+                            </body>
+
+                        </html>
+
+
+                          </body>
+                        </html>
+                        """.replace("{", "{{").replace("}", "}}").format(request.form['username'], token)
+
+                        msg.attach(MIMEText(html, 'html'))
+                        text = msg.as_string()
+                        server.sendmail("dushyant7917official@gmail.com", email, text)
+
+                        #################################
+                        '''
                         msg = Message('Confirm your account!', sender = 'dushyant7917official@gmail.com', recipients = [email])
                         msg.html = render_template("email.html", username = request.form['username'], token = token)
                         mail.send(msg)
+                        '''
+                        #################################
+
                         message = Markup("Check your mail to verify your account!")
                         flash(message)
                         return render_template('login.html', colour = "black")
@@ -359,6 +569,6 @@ def verify(username, token):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'some secret key'
+    app.secret_key = 'dushyant7917'
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug = True)
