@@ -16,14 +16,14 @@ from email.MIMEText import MIMEText
 
 server = smtplib.SMTP('smtp.gmail.com', 587)
 server.starttls()
-server.login("dushyant7917official@gmail.com", "abc123#%()")
+server.login("dushyant7917official@gmail.com", "password")
 
 #############################################
 
 app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'blog'
-app.config['MONGO_URI'] = 'mongodb://dushyant7917:abc123@ds019471.mlab.com:19471/blog'
+app.config['MONGO_URI'] = 'online mongodb uri'
 # Use below URI for local db
 # app.config['MONGO_URI'] = 'mongodb://localhost:27017/blog'
 
@@ -34,7 +34,7 @@ mongo = PyMongo(app)
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'dushyant7917official@gmail.com'
-app.config['MAIL_PASSWORD'] = 'abc123#%()'
+app.config['MAIL_PASSWORD'] = 'password'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
